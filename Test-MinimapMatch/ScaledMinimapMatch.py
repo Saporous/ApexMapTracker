@@ -25,7 +25,7 @@ template = cv2.Canny(template, 50, 200)
 cv2.imshow("Template", template)
 # loop over the images to find the template in
 # for imagePath in glob.glob(args["images"] + "/*.jpg"):
-for imagePath in glob.glob('WorldsEdge.png'):
+for imagePath in glob.glob('Map[0-9].png'):
 # for imagePath in glob.glob('Olympus.png'):
 	# load the image, convert it to grayscale, and initialize the
 	# bookkeeping variable to keep track of the matched region
