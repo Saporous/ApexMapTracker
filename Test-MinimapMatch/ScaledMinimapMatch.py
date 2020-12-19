@@ -33,6 +33,7 @@ for imagePath in glob.glob('WorldsEdge.png'):
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	found = None
 	scaleVal = None
+	tempResult = None
 	# loop over the scales of the image
 	for scale in np.linspace(0.2, 1.0, 20)[::-1]:
 		# resize the image according to the scale, and keep track
@@ -46,7 +47,7 @@ for imagePath in glob.glob('WorldsEdge.png'):
 		# detect edges in the resized, grayscale image and apply template
 		# matching to find the template in the image
 		edged = cv2.Canny(resized, 50, 200)
-		result = cv2.matchTemplate(edged, template, cv2.TM_CCOEFF)
+		result = cv2.matchTemplate(edged, template, cv2.TM_CCOEFF_NORMED)
 		(_, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
 		# check to see if the iteration should be visualized
 		# if args.get("visualize", False):
@@ -61,15 +62,20 @@ for imagePath in glob.glob('WorldsEdge.png'):
 		if found is None or maxVal > found[0]:
 			found = (maxVal, maxLoc, r)
 			scaleVal = scale
+			tempResult = result
 	# unpack the bookkeeping variable and compute the (x, y) coordinates
 	# of the bounding box based on the resized ratio
 	(_, maxLoc, r) = found
 	(startX, startY) = (int(maxLoc[0] * r), int(maxLoc[1] * r))
 	(endX, endY) = (int((maxLoc[0] + tW) * r), int((maxLoc[1] + tH) * r))
 	print(scaleVal)
+	maxValRound = str(round(maxVal*100,2)) + "%"
+	print(maxValRound)
 	print(startX)
 	print(startY)
 	# draw a bounding box around the detected result and display the image
 	cv2.rectangle(image, (startX, startY), (endX, endY), (0, 0, 255), 2)
+	fontFace=cv2.FONT_HERSHEY_SIMPLEX
+	cv2.putText(image, str(maxValRound),(startX, startY-4),fontFace,1,(0,0,255),2)
 	cv2.imshow("Image", image)
 	cv2.waitKey(0)
