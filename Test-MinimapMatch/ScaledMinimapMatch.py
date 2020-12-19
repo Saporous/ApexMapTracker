@@ -25,6 +25,10 @@ template = cv2.Canny(template, 50, 200)
 cv2.imshow("Template", template)
 # loop over the images to find the template in
 # for imagePath in glob.glob(args["images"] + "/*.jpg"):
+lastMaxVal = 0
+iter = 0
+mapName = ["World's Edge","Olympus"]
+lastMapVal = 0
 for imagePath in glob.glob('Map[0-9].png'):
 # for imagePath in glob.glob('Olympus.png'):
 	# load the image, convert it to grayscale, and initialize the
@@ -68,14 +72,22 @@ for imagePath in glob.glob('Map[0-9].png'):
 	(_, maxLoc, r) = found
 	(startX, startY) = (int(maxLoc[0] * r), int(maxLoc[1] * r))
 	(endX, endY) = (int((maxLoc[0] + tW) * r), int((maxLoc[1] + tH) * r))
-	print(scaleVal)
-	maxValRound = str(round(maxVal*100,2)) + "%"
-	print(maxValRound)
-	print(startX)
-	print(startY)
+	# print(scaleVal)
+	maxValRound = round(maxVal*100,2)
+	# print(maxValRound)
+	# print(startX)
+	# print(startY)
+
 	# draw a bounding box around the detected result and display the image
-	cv2.rectangle(image, (startX, startY), (endX, endY), (0, 0, 255), 2)
-	fontFace=cv2.FONT_HERSHEY_SIMPLEX
-	cv2.putText(image, str(maxValRound),(startX, startY-4),fontFace,1,(0,0,255),2)
-	cv2.imshow("Image", image)
-	cv2.waitKey(0)
+	# cv2.rectangle(image, (startX, startY), (endX, endY), (0, 0, 255), 2)
+	# fontFace=cv2.FONT_HERSHEY_SIMPLEX
+	# cv2.putText(image, str(maxValRound),(startX, startY-4),fontFace,1,(0,0,255),2)
+	# cv2.imshow("Image", image)
+	# cv2.waitKey(0)
+	if maxValRound > lastMaxVal:
+		lastMaxVal = maxValRound
+		lastMapVal = iter
+	iter += 1
+
+print("My best guess is the map is " + mapName[lastMapVal] 
++ " with " + str(lastMaxVal) + "% confidence")
