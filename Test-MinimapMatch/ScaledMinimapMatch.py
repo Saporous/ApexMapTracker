@@ -20,7 +20,7 @@ import cv2
 # template = cv2.imread('oly2.png')
 template = cv2.imread('WE3.png')
 template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
-template = cv2.Canny(template, 50, 200)
+template = cv2.Canny(template, 99, 200)
 (tH, tW) = template.shape[:2]
 cv2.imshow("Template", template)
 # loop over the images to find the template in
@@ -50,7 +50,7 @@ for imagePath in glob.glob('Map[0-9].png'):
 			break
 		# detect edges in the resized, grayscale image and apply template
 		# matching to find the template in the image
-		edged = cv2.Canny(resized, 50, 200)
+		edged = cv2.Canny(resized, 99, 200)
 		result = cv2.matchTemplate(edged, template, cv2.TM_CCOEFF_NORMED)
 		(_, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
 		# check to see if the iteration should be visualized
